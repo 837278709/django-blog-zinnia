@@ -2,34 +2,34 @@
 """Test cases for Zinnia's views"""
 from datetime import date
 
-from django.test import TestCase
-from django.utils import timezone
-from django.contrib.sites.models import Site
-from django.test.utils import override_settings
-from django.utils.translation import ugettext_lazy as _
-from django.contrib.auth.signals import user_logged_in
 from django.contrib.auth.models import update_last_login
+from django.contrib.auth.signals import user_logged_in
+from django.contrib.sites.models import Site
+from django.test import TestCase
+from django.test.utils import override_settings
+from django.utils import timezone
+from django.utils.translation import ugettext_lazy as _
 
 import django_comments as comments
 
-from zinnia.models.entry import Entry
-from zinnia.models.author import Author
-from zinnia.models.category import Category
-from zinnia.views import quick_entry
+from zinnia.flags import get_user_flagger
 from zinnia.managers import DRAFT
 from zinnia.managers import PUBLISHED
+from zinnia.models.author import Author
+from zinnia.models.category import Category
+from zinnia.models.entry import Entry
 from zinnia.settings import PAGINATION
-from zinnia.tests.utils import datetime
-from zinnia.tests.utils import urlEqual
-from zinnia.tests.utils import skipIfCustomUser
-from zinnia.flags import get_user_flagger
 from zinnia.signals import connect_discussion_signals
-from zinnia.signals import disconnect_entry_signals
 from zinnia.signals import disconnect_discussion_signals
+from zinnia.signals import disconnect_entry_signals
+from zinnia.tests.utils import datetime
+from zinnia.tests.utils import skip_if_custom_user
+from zinnia.tests.utils import url_equal
 from zinnia.url_shortener.backends.default import base36
+from zinnia.views import quick_entry
 
 
-@skipIfCustomUser
+@skip_if_custom_user
 @override_settings(
     SESSION_ENGINE='django.contrib.sessions.backends.cache',
     TEMPLATES=[
@@ -721,7 +721,7 @@ class ViewsTestCase(ViewsBaseCase):
             '/admin/zinnia/entry/add/')
         response = self.client.post('/quick-entry/', {'content': 'test'})
         self.assertEqual(response.status_code, 302)
-        self.assertTrue(urlEqual(
+        self.assertTrue(url_equal(
             response['Location'],
             '/admin/zinnia/entry/add/'
             '?tags=&title=&sites=1&content='
@@ -749,7 +749,7 @@ class ViewsTestCase(ViewsBaseCase):
                                      'content': 'Test content',
                                      'save_draft': ''})
         self.assertEqual(response.status_code, 302)
-        self.assertTrue(urlEqual(
+        self.assertTrue(url_equal(
             response['Location'],
             '/admin/zinnia/entry/add/'
             '?tags=test-2&title=%D1%82%D0%B5%D1%81%D1%82'

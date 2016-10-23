@@ -2,30 +2,30 @@
 from datetime import timedelta
 from unittest import skipUnless
 
-from django.test import TestCase
-from django.utils import timezone
 from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
+from django.test import TestCase
+from django.test.utils import override_settings
+from django.utils import timezone
 from django.utils.translation import activate
 from django.utils.translation import deactivate
-from django.test.utils import override_settings
 
 import django_comments as comments
 from django_comments.models import CommentFlag
 
 from zinnia import markups
-from zinnia.managers import PUBLISHED
-from zinnia.models_bases import entry
-from zinnia.models.entry import Entry
-from zinnia.models.author import Author
+from zinnia import url_shortener as shortener_settings
 from zinnia.flags import PINGBACK
 from zinnia.flags import TRACKBACK
+from zinnia.managers import PUBLISHED
+from zinnia.models.author import Author
+from zinnia.models.entry import Entry
+from zinnia.models_bases import entry
+from zinnia.signals import disconnect_discussion_signals
+from zinnia.signals import disconnect_entry_signals
 from zinnia.tests.utils import datetime
 from zinnia.tests.utils import is_lib_available
-from zinnia.tests.utils import skipIfCustomUser
-from zinnia import url_shortener as shortener_settings
-from zinnia.signals import disconnect_entry_signals
-from zinnia.signals import disconnect_discussion_signals
+from zinnia.tests.utils import skip_if_custom_user
 from zinnia.url_shortener.backends.default import base36
 
 
@@ -39,7 +39,7 @@ class EntryTestCase(TestCase):
                   'slug': 'my-entry'}
         self.entry = Entry.objects.create(**params)
 
-    @skipIfCustomUser
+    @skip_if_custom_user
     def test_discussions(self):
         site = Site.objects.get_current()
         self.assertEqual(self.entry.discussions.count(), 0)

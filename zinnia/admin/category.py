@@ -1,7 +1,7 @@
 """CategoryAdmin for Zinnia"""
 from django.contrib import admin
-from django.utils.html import format_html
 from django.core.urlresolvers import NoReverseMatch
+from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
 
 from zinnia.admin.forms import CategoryAdminForm
@@ -32,5 +32,4 @@ class CategoryAdmin(admin.ModelAdmin):
                 category.get_absolute_url(), category.tree_path)
         except NoReverseMatch:
             return '/%s/' % category.tree_path
-    get_tree_path.allow_tags = True
     get_tree_path.short_description = _('tree path')
