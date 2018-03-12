@@ -1,10 +1,7 @@
 """Feeds for Zinnia"""
 import os
 from mimetypes import guess_type
-try:
-    from urllib.parse import urljoin
-except ImportError:  # Python 2
-    from urlparse import urljoin
+from urllib.parse import urljoin
 
 from bs4 import BeautifulSoup
 
@@ -12,10 +9,10 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.sites.models import Site
 from django.contrib.syndication.views import Feed
 from django.core.exceptions import ObjectDoesNotExist
-from django.core.urlresolvers import NoReverseMatch
-from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404
 from django.template.defaultfilters import slugify
+from django.urls import NoReverseMatch
+from django.urls import reverse
 from django.utils.encoding import smart_text
 from django.utils.feedgenerator import Atom1Feed
 from django.utils.translation import ugettext as _
